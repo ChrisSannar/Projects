@@ -7,7 +7,6 @@ var sessions = require('express-session');
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
-var loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -42,14 +41,13 @@ const sessionChecker = (req, res, next) => {
   if (req.session.user && req.cookies.user_sid) {
     next();
   } else {
-    res.redirect('/login');
+    res.redirect('/users/login');
   }
   // console.log(`COOKIE:`, req.cookies.user_sid);
   // next();
 }
 
 app.use('/users', usersRouter);
-app.use('/login', loginRouter);
 app.use('/', sessionChecker, indexRouter);
 // app.use('/', indexRouter);
 

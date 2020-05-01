@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/ChrisSannar/Projects/issues"
   },
-  "homepage": "https://github.com/ChrisSannar/Projects#readme"
+  "homepage": "https://github.com/ChrisSannar/Projects#readme",
+  "devDependencies": {}
 }
