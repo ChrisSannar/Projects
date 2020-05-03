@@ -6,6 +6,14 @@ var logger = require('morgan');
 var sessions = require('express-session');
 require('dotenv').config();
 
+var mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
+mongoose.connect('mongodb://localhost/testing', { useNewUrlParser: true, useUnifiedTopology: true });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+const MongoStore = require('connect-mongo')(sessions);
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -27,7 +35,8 @@ app.use(sessions({
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 30  // Set for 60 days
-  }
+  },
+  store: new MongoStore({ mongooseConnection: db })
 }));
 
 app.use((req, res, next) => {

@@ -1,2 +1,7 @@
 <p>This is the value: <%= count %></p>
 <p><a href="/users/logout">logout</a></p>
+<form action="/users/new-password" method="POST">
+  <input type="text" name="username" placeholder="Username" />
+  <input type="text" name="newPassword" placeholder="New Password" />
+  <button type="submit">Save</button>
+</form>
