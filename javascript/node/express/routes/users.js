@@ -3,6 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/testing', { useNewUrlParser: true, useUnifiedTopology: true });
 
+
 /* GET home page. */
 router.get('/login', function (req, res, next) {
   let error = '';
