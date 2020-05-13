@@ -48,7 +48,7 @@ app.use((req, res, next) => {
     res.clearCookie('user_sid');
   }
   next();
-})
+});
 
 // This may seem a little redundant from above, but it's an extra check specifically for root
 //   Otherwise we get stuck in a cookie loop. Can't really think of another word for it beside that...

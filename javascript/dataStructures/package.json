@@ -1,0 +1,25 @@
+{
+  "name": "node-practice",
+  "version": "1.0.0",
+  "description": "A bunch of projects and things that I'm testing in node",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisSannar/Projects.git"
+  },
+  "keywords": [
+    "practice",
+    "learning"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChrisSannar/Projects/issues"
+  },
+  "homepage": "https://github.com/ChrisSannar/Projects#readme",
+  "devDependencies": {}
+}

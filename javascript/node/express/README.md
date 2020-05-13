@@ -20,3 +20,5 @@ Bugs/Things learned:
 - Express will run the first path listed that matches the pattern, so be sure to have those paths lower on the list such as the root path ('/'). That goes at the very last.
 - It's important to seperate components from each other so they can be easily interchanged with other projects. The mongoose schemas should be in their own file and let the app connect to the database so they can remained loosely coupled while maintaining high cohesion.
 - Depending on the hooks that you use, the injected function value will be different. For any kind of update hook (also find and some others) it'll use a query object instead of the document that it's sending in.
+
+# AWS Deployment
