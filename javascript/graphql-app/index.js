@@ -77,9 +77,10 @@ var root = {
 
 app.use('/graphql', graphqlHTTP({
   // schema,
-  schema: buildSchema(localGraphQL.schema),
+  // schema: buildSchema(localGraphQL.schema),
+  schema: localGraphQL.objSchema,
   // rootValue: root,
-  rootValue: localGraphQL.root,
+  // rootValue: localGraphQL.root,
   graphiql: process.env.NODE_ENV === 'development'
 }))
 

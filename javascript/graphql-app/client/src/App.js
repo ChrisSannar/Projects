@@ -22,7 +22,8 @@ function App() {
 
   const sendRequest = () => {
 
-    let query = `query { message(value: "${message}") }`
+    // let query = `query { message(value: "${message}") }`
+    let query = ``
 
     axios.get(`graphql?query=` + query)
       .then(resp => {
