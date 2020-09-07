@@ -19,10 +19,19 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/profile', 'ProfilesController@redirect');
 Route::get('/profile/{user}', 'ProfilesController@index')->name('profile.show');
 
-Route::get('/test', function() {
-    return view('test');
+
+Route::get('/home', function() {
+    return redirect('/profile');
 });
 
+// Tasks
+Route::get('/tasks', 'TaskController@index');
+Route::get('/tasks/create', 'TaskController@create');
+Route::post('tasks', 'TaskController@store');
+
+// Testing
 Route::get('/test2', 'TestController@index');
+Route::get('/test', 'TestController@api');

@@ -16,6 +16,10 @@
                     <h1>{{ $user->username }}</h1>
                     <h2>{{ $user->profile->title }}</h2>
                     <div>{{ $user->profile->description }}</div>
+                    <a href="/tasks">My Tasks</a>
+                </div>
+                <div id="app">
+                    <example-component></example-component>
                 </div>
             </div>
         </div>

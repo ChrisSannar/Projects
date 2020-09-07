@@ -6,7 +6,9 @@
                     <div class="card-header">Example Component</div>
 
                     <div class="card-body">
-                        I'm an example component.
+                        <p v-for="task of tasks" :key="task.id">
+                            {{ task.text }} - {{ task.completed ? 'ok' : 'x' }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -15,9 +17,27 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
+import axios from 'axios';
+
+export default {
+    data() {
+        return {
+            tasks: []
+        }
+    },
+    mounted() {
+        console.log('Component mounted.');
+        this.getTasks()
+            .then((resp) => {
+                let { data } = resp.data;
+                this.tasks = data;
+            })
+            .catch(console.error);
+    },
+    methods: {
+        getTasks: () => {
+            return axios.get('/test')
         }
     }
+}
 </script>

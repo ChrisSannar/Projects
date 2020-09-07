@@ -5,15 +5,6 @@ namespace App\Http\Controllers;
 use App\User;
 // use Illuminate\Http\Request;
 
-/*
-    This file is how we get the data and render it to the page.
-    Mainly each Controller is used to define some kind of interaction/object then how that object works
-    Ex. How do we get the profile form the database?
-        What data is being rendered to the page?
-        How do we organize that data?
-        What view do we 
-*/
-
 class ProfilesController extends Controller
 {
     public function index($user) {
@@ -24,8 +15,17 @@ class ProfilesController extends Controller
         $temp = User::findOrFail($user);
         // dd($temp);
 
-        return view('home', [
+        return view('profiles.index', [
             'user' => $temp,
         ]);
+    }
+
+    // in the case that we need to get back to the profile, lets get the current user
+    public function redirect() {
+        if (auth()->user()) {
+            return redirect('/profile/' . auth()->user()->id);
+        } else {
+            return redirect('/login');
+        }
     }
 }
