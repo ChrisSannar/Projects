@@ -13,8 +13,9 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    {{ __('You are logged in!') }}
+                    <h1>{{ $user->username }}</h1>
+                    <h2>{{ $user->profile->title }}</h2>
+                    <div>{{ $user->profile->description }}</div>
                 </div>
             </div>
         </div>
