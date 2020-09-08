@@ -11,4 +11,9 @@ class Task extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function setTask($newTask) {
+        $this->attributes['text'] = $newTask['text'];
+        $this->attributes['completed'] = $newTask['completed'];
+    }
 }

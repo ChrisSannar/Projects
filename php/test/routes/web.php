@@ -30,8 +30,9 @@ Route::get('/home', function() {
 // Tasks
 Route::get('/tasks', 'TaskController@index');
 Route::get('/tasks/create', 'TaskController@create');
-Route::post('tasks', 'TaskController@store');
+Route::post('/tasks', 'TaskController@store');
 
 // Testing
 Route::get('/test2', 'TestController@index');
 Route::get('/test', 'TestController@api');
+Route::put('/test', 'TestController@put');

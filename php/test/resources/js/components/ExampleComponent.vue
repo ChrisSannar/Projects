@@ -6,9 +6,22 @@
                     <div class="card-header">Example Component</div>
 
                     <div class="card-body">
-                        <p v-for="task of tasks" :key="task.id">
-                            {{ task.text }} - {{ task.completed ? 'ok' : 'x' }}
-                        </p>
+                        <div v-for="(task, index) of tasks" :key="index">
+                            <input 
+                                type="checkbox" 
+                                name="completed" 
+                                :id="'completed-' + index" 
+                                :checked="!!task.completed" 
+                                @change="markTask($event, index)">
+                            <input 
+                                type="text" 
+                                name="text" 
+                                :id="'text-' + index" 
+                                :value="task.text" 
+                                @keydown="changeTask($event, index)">
+                        </div>
+                        <button @click="saveList">Save</button>
+                        <p v-if="message">{{ message }}</p>
                     </div>
                 </div>
             </div>
@@ -22,12 +35,13 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            tasks: []
+            tasks: [],
+            message: "",
         }
     },
     mounted() {
         console.log('Component mounted.');
-        this.getTasks()
+        this.getTasks() 
             .then((resp) => {
                 let { data } = resp.data;
                 this.tasks = data;
@@ -37,6 +51,30 @@ export default {
     methods: {
         getTasks: () => {
             return axios.get('/test')
+        },
+        saveTasks: (tasks) => {
+            return axios.put('/test', tasks);
+        },
+        markTask(event, index) {
+            // console.log('mark', event.target.checked, index);
+            this.tasks[index].completed = event.target.checked ? 1 : 0;
+        },
+        changeTask(event, index){
+            this.tasks[index].text = event.target.value;
+        },
+        saveList() {
+            console.log('saveTasks', this.tasks);
+
+            let self = this;
+            this.saveTasks(this.tasks)
+                .then((resp) => {
+                    console.log("RESP", resp);
+                    // self.message = "Tasks Saved";
+                    // setTimeout(() => {
+                    //     self.message = "";
+                    // }, 3000)
+                })
+                .catch(console.error);
         }
     }
 }

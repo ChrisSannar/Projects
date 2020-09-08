@@ -1928,11 +1928,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      tasks: []
+      tasks: [],
+      message: ""
     };
   },
   mounted: function mounted() {
@@ -1947,6 +1961,26 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getTasks: function getTasks() {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/test');
+    },
+    saveTasks: function saveTasks(tasks) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/test', tasks);
+    },
+    markTask: function markTask(event, index) {
+      // console.log('mark', event.target.checked, index);
+      this.tasks[index].completed = event.target.checked ? 1 : 0;
+    },
+    changeTask: function changeTask(event, index) {
+      this.tasks[index].text = event.target.value;
+    },
+    saveList: function saveList() {
+      console.log('saveTasks', this.tasks);
+      var self = this;
+      this.saveTasks(this.tasks).then(function (resp) {
+        console.log("RESP", resp); // self.message = "Tasks Saved";
+        // setTimeout(() => {
+        //     self.message = "";
+        // }, 3000)
+      })["catch"](console.error);
     }
   }
 });
@@ -37546,18 +37580,40 @@ var render = function() {
           _c(
             "div",
             { staticClass: "card-body" },
-            _vm._l(_vm.tasks, function(task) {
-              return _c("p", { key: task.id }, [
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(task.text) +
-                    " - " +
-                    _vm._s(task.completed ? "ok" : "x") +
-                    "\n                    "
-                )
-              ])
-            }),
-            0
+            [
+              _vm._l(_vm.tasks, function(task, index) {
+                return _c("div", { key: index }, [
+                  _c("input", {
+                    attrs: {
+                      type: "checkbox",
+                      name: "completed",
+                      id: "completed-" + index
+                    },
+                    domProps: { checked: !!task.completed },
+                    on: {
+                      change: function($event) {
+                        return _vm.markTask($event, index)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: { type: "text", name: "text", id: "text-" + index },
+                    domProps: { value: task.text },
+                    on: {
+                      keydown: function($event) {
+                        return _vm.changeTask($event, index)
+                      }
+                    }
+                  })
+                ])
+              }),
+              _vm._v(" "),
+              _c("button", { on: { click: _vm.saveList } }, [_vm._v("Save")]),
+              _vm._v(" "),
+              _vm.message ? _c("p", [_vm._v(_vm._s(_vm.message))]) : _vm._e()
+            ],
+            2
           )
         ])
       ])
