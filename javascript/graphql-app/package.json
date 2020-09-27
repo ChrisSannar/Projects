@@ -1,24 +1,17 @@
 {
   "name": "graphql-app",
   "version": "1.0.0",
-  "description": "GraphQL practice",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "devServer": "NODE_ENV=development nodemon --inspect index.js",
-    "devClient": "npm start --prefix client",
-    "dev": "concurrently \"npm run devServer\" \"npm run devClient\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Christopher Sannar",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "5.2.0",
-    "express": "4.17.1",
-    "express-graphql": "0.11.0",
-    "graphql": "15.3.0",
-    "morgan": "1.10.0"
-  },
-  "devDependencies": {
-    "nodemon": "2.0.4"
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0"
   }
 }
