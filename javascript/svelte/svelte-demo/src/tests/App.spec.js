@@ -1,9 +1,12 @@
-// it('resolves', async () => {})
+import App from "../App.svelte";
+import { render } from "@testing-library/svelte";
 
-// describe('App Component', () => {
-//   test('should render component', () => {
-//     const { container } = render(App)
+it("resolves", async () => {});
 
-//     expect(container).toContainHTML('<h1>Hello</h1>')
-//   })
-// })
+describe("App Component", () => {
+  test("should render component", () => {
+    const { container } = render(App);
+
+    expect(container).toContain("Hello");
+  });
+});
