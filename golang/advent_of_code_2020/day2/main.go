@@ -23,7 +23,7 @@ func parseDatabasePasswordValues(text string) {
 		low, _ := strconv.Atoi(limitStringSplit[0])
 		high, _ := strconv.Atoi(limitStringSplit[1])
 
-		fmt.Println(low, high, item, password)
+		// fmt.Println(low, high, item, password)
 		
 		// var charOccuranceCount int = 0
 		// for _, charInPassword := range password {
