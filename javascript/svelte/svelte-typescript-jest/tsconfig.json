@@ -1,9 +1,9 @@
 {
+  "extends": "@tsconfig/svelte/tsconfig.json",
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
-    "target": "es6",
-    "baseUrl": "./",
-    "esModuleInterop": true,
-    "types": ["@pyoner/svelte-types", "jest"]
-  },
-  "include": ["src/**/*"]
+    "types": ["jest"]
+  }
 }

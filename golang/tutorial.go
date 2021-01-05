@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	// "strings"
+	"regexp"
+	"./advent_of_code_2020/util"
+)
 
 // Comment
 
@@ -13,6 +18,13 @@ staticly typed
 
 func main() {
 
+	text := util.ReadFileToString("./temp.txt")
+	// lines := strings.Split(text, "\n")
+	reg := regexp.MustCompile(`[^\S\r\n]+`)
+	fmt.Println("---")
+	fmt.Println(reg.ReplaceAllString(text, ","))
+	fmt.Println("---")
+	/*
 	addUp := func (nums []int) (string, int) {
 		sum := 0
 		
@@ -92,21 +104,21 @@ func main() {
 	fmt.Println(mappers)
 
 	fmt.Println("Hello World", asdf_1234, num, num2, factorial(varA), factorial(varB))
-
+	/* */
 }
 
-func factorial (num int) int {
-	if num < 0 {
-		return 0
-	}
+// func factorial (num int) int {
+// 	if num < 0 {
+// 		return 0
+// 	}
 
-	if num == 0 {
-		return 1;
-	} else {
-		return (factorial(num - 1) * num);
-	}
-}
+// 	if num == 0 {
+// 		return 1;
+// 	} else {
+// 		return (factorial(num - 1) * num);
+// 	}
+// }
 
-func nextPrime(n int) int {
+// func nextPrime(n int) int {
 	
-}
+// }
