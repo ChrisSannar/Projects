@@ -1,6 +1,9 @@
 package algos
 
-import "testing"
+import (
+	"testing" 
+	// "fmt"
+)
 
 func TestBinarySearch(t *testing.T) {
 
@@ -33,8 +36,13 @@ func TestInsertionSort(t *testing.T) {
 }
 
 func TestMergeSort(t *testing.T) {
-	// testSortingAlgorithm(t, MergeSort)
-	MergeSort([]int{9, 2, 3, 1, 5, 4, 7})
+	testSortingAlgorithm(t, MergeSort)
+	// MergeSort([]int{9, 2, 3, 1, 5, 4, 7})
+}
+
+func TestQuickSort(t *testing.T) {
+	testSortingAlgorithm(t, QuickSort)
+	// fmt.Println(QuickSort([]int{9, 2, 3, 1, 5, 4, 7}))
 }
 
 func testBinarySearchSetup(t *testing.T, arr []int, item int, correctIndex int) {

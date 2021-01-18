@@ -125,5 +125,41 @@ func merge(arr1 []int, arr2 []int) []int {
 
 // QuickSort sorts an array with quicksort
 func QuickSort(arr []int) []int {
-	return []int{}
+	return recursiveQuickSort(arr, 0, len(arr) - 1)
+}
+
+func recursiveQuickSort(arr []int, low int, high int) []int {
+	
+	// If our partition is too small, then we're done
+	if low < high {
+
+		// Get the partition index
+		div := partition(arr, low, high)
+
+		// Recurse to both sides of the pivot
+		recursiveQuickSort(arr, low, div - 1)
+		recursiveQuickSort(arr, div + 1, high)
+	}
+	return arr
+}
+
+func partition(arr []int, low int, high int) int {
+	
+	// Grab some pivot value
+	pivot := arr[high]
+	i := low
+
+	// For the range of values...
+	for j := low; j < high; j++ {
+		
+		// Sort them to be lower/higher than the pivot
+		if arr[j] < pivot {
+			swap(arr, i, j)
+			i++
+		}
+	}
+
+	// Move the pivot into the correct spot when done (between the divided sides)
+	swap(arr, i, high)
+	return i
 }
