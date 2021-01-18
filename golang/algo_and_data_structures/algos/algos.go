@@ -78,9 +78,50 @@ func InsertionSort(arr []int) []int {
 
 // MergeSort sorts an array with mergesort
 func MergeSort(arr []int) []int {
-	return []int{}
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	midIndex := len(arr) / 2
+	left := MergeSort(arr[:midIndex])
+	right := MergeSort(arr[midIndex:])
+	return merge(left, right)
+
 }
 
+// Merges two arrays together in order
+func merge(arr1 []int, arr2 []int) []int {
+
+	// Create the resulting array and assign the indicies
+	result := make([]int, len(arr1) + len(arr2))
+	resultIndex, index1, index2 := 0, 0, 0
+	for index1 < len(arr1) && index2 < len(arr2) {
+
+		// If arr1 has the lower number, insert that in and vice versa
+		if arr1[index1] <= arr2[index2] {
+			result[resultIndex] = arr1[index1]
+			index1++
+		} else {
+			result[resultIndex] = arr2[index2]
+			index2++
+		}
+		resultIndex++
+	}
+
+	// Copy the remaining elements over
+	for index1 < len(arr1) {
+		result[resultIndex] = arr1[index1]
+		index1++
+		resultIndex++
+	}
+	for index2 < len(arr2) {
+		result[resultIndex] = arr2[index2]
+		index2++
+		resultIndex++
+	}
+
+	return result
+}
 
 // QuickSort sorts an array with quicksort
 func QuickSort(arr []int) []int {

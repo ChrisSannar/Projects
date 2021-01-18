@@ -29,7 +29,12 @@ func TestSelectionSort(t *testing.T) {
 }
 
 func TestInsertionSort(t *testing.T) {
-	testSortingAlgorithm(t, InsertionSort )
+	testSortingAlgorithm(t, InsertionSort)
+}
+
+func TestMergeSort(t *testing.T) {
+	// testSortingAlgorithm(t, MergeSort)
+	MergeSort([]int{9, 2, 3, 1, 5, 4, 7})
 }
 
 func testBinarySearchSetup(t *testing.T, arr []int, item int, correctIndex int) {
@@ -47,7 +52,7 @@ Expected: %v
 type algorithm func([]int) []int
 
 func testSortingAlgorithm(t *testing.T, fn algorithm) {
-	arr := GenerateRandomArray(10)
+	arr := GenerateRandomArray(8)
 	sorted := fn(arr)
 	if !testIfSortedArray(sorted) {
 		t.Fatalf(`
@@ -63,6 +68,29 @@ Sorted: %v
 		t.Fatalf(`
 Empty Array failed to sort`)
 	}
+
+	// Test edge cases
+	arr = GenerateRandomArray(1)
+	sorted = fn(arr)
+	if !testIfSortedArray(sorted) {
+		t.Fatalf(`
+One item array failed to sort
+Original: %v
+Sorted: %v
+`, arr, sorted)
+	}
+
+	// Odd Sorting
+	arr = GenerateRandomArray(23)
+	sorted = fn(arr)
+	if !testIfSortedArray(sorted) {
+		t.Fatalf(`
+Odd Array failed to sort
+Original: %v
+Sorted: %v
+`, arr, sorted)
+	}
+	
 }
 
 func testIfSortedArray(arr []int) bool {
