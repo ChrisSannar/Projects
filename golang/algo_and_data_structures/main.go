@@ -2,19 +2,29 @@ package main
 
 import (
 	"fmt"
-	"./algos"
 )
 
 func main() {
-	// arr := algos.GenerateOrderedArray(10)
-	arr := []int{2, 9, 12, 33, 68}
-	index := algos.BinarySearch(arr, 68)
-	if index < 0 {
-		fmt.Println("Item not found")
-	} else {
-		fmt.Println("Item found at index:", index)
+	fmt.Println("WORKING")
+	testAddStructToArrayStructProperty()
+}
+
+type B struct {
+	value string
+}
+
+type A struct {
+	arr []*B
+}
+
+func testAddStructToArrayStructProperty() {
+	AMap := map[string]*A{}
+	a := &A{arr: []*B{}}
+	AMap["A"] = a
+	bs := []*B{&B{value: "test1"}, &B{value: "test2"}, &B{value: "test3"}}
+	for _, b := range bs {
+		mappers := AMap["A"]
+		mappers.arr = append(a.arr, b)
 	}
-	// arr := algos.GenerateRandomArray(10)
-	// algos.SelectionSort(arr)
-	// fmt.Println("algo", arr)
+	fmt.Println(AMap["A"])
 }
