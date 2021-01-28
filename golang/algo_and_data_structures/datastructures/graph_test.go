@@ -14,5 +14,36 @@ Graph Nodes failed to insert
 Expected: %v,
 Result: %v`, graphers.size, len(graphers.nodes))
 	}
+
+	if graphers.head.value != "A" {
+		t.Errorf(`
+Failed to set graph head
+Expected: %v
+Result: %v`, "A", graphers.head.value)
+	}
+
+	result, err := graphers.findDepthSearch("D")
+	if err != "" {
+		t.Errorf(err)
+	}
+
+	if result.value != "D" {
+		t.Errorf(`
+Failed to find item with depth-first search
+Expected: %v,
+Result: %v`, "D", result.value)
+	}
+
+	result, err = graphers.findBreathSearch("D")
+	if err != "" {
+		t.Errorf(err)
+	}
+
+	if result.value != "D" {
+		t.Errorf(`
+Failed to find item with depth-first search
+Expected: %v,
+Result: %v`, "D", result.value)
+	}
 	graphers.print()
 }
