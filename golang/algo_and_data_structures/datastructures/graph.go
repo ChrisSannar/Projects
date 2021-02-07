@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"math"
 )
 
+// Edge is a graph edge that supports weights
 type Edge struct {
 	weight int
 	from   *Node
 	to     *Node
 }
 
+// Node is a graph node that supports weights and edges
 type Node struct {
 	edges  []*Edge
 	value  string
@@ -37,12 +40,50 @@ func (graph *Graph) print() {
 
 // Searches thorough a graph, recursively depth first, to find a Node given a string value
 func (graph *Graph) findDepthSearch(value string) (*Node, string) {
-	return &Node{edges: []*Edge{}, value: "", weight: 0}, ""
+	return findDepthSearchRec(value, graph.head)
 }
 
-// Searches thorough a graph, recursively breath first, to find a Node given a string value
-func (graph *Graph) findBreathSearch(value string) (*Node, string) {
-	return &Node{edges: []*Edge{}, value: "", weight: 0}, ""
+// A recursive function for finding a node using depthfirst search
+func findDepthSearchRec(value string, node *Node) (*Node, string) {
+
+	// If we find what we're looking for, then send it up
+	if node.value == value {
+		return node, ""
+	}
+
+	// Make sure it's listed that we've visited this node before
+	node.weight = int(math.Inf(-1))
+
+	// if not, recursively call each edge
+	for _, edge := range node.edges {
+		
+		// Make sure we aren't visiting a node that's already been visited
+		if edge.to == nil || edge.to.weight == int(math.Inf(-1)) {
+			continue
+		}
+
+		// Return if we do find it
+		node, err := findDepthSearchRec(value, edge.to)
+		if node != nil {
+			return node, err
+		}
+	}
+
+	return nil, "Unable to find value"
+}
+
+// Searches thorough a graph, recursively breadth first, to find a Node given a string value
+func (graph *Graph) findBreadthSearch(value string) (*Node, string) {
+	return findBreadthSearchRec(value, graph.head)
+	// return &Node{edges: []*Edge{}, value: "", weight: 0}, ""
+}
+
+// A recursive function for finding a node using depthfirst search
+func findBreadthSearchRec(value string, node *Node) (*Node, string) {
+
+	node.weight = int(math.Inf(-1))
+
+	return nil, "Unable to find value"
 }
 
 // Finds the cheapest path between two nodes
@@ -80,7 +121,7 @@ func CreateWeightedGraphFromInput(nodes []string, edges []string) Graph {
 	for _, edgeStr := range edges {
 
 		// Split the values out and parse them into an edge
-		split := regex.Split(edgeStr, -1)
+		split := regex.Split(edgeStr, int(math.Inf(-1)))
 		weight, _ := strconv.Atoi(split[1])
 		edge := &Edge{
 			weight: weight,
