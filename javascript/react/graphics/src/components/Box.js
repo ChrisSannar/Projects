@@ -1,59 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import "./Box.css"
 
 function Box() {
-  
-  // Default Box size
-  const [boxWidth, setBoxWidth] = useState(100)
-  const [boxHeight, setBoxHeight] = useState(100)
-  
-  // Default box position
-  const [boxLeft, setBoxLeft] = useState(0)
-  const [boxTop, setBoxTop] = useState(0)
+
+  // Use Ref to keep a shallow render
+  const box = useRef(null);
 
   const [mouseX, setMouseX] = useState(0)
   const [mouseY, setMouseY] = useState(0)
 
   const [dragging, setDragging] = useState(false)
 
-  // Box styling
-  const [boxStyling, setBoxStyling] = useState({
-    backgroundColor: "red",
-    position: "absolute",
-    cursor: "pointer",
-    width: `${boxWidth}px`,
-    height: `${boxHeight}px`,
-    left: `${boxLeft}px`,
-    top: `${boxTop}px`,
-  })
-
-  // When we change any of the box stylings, make sure to update them
-  useEffect(() => {
-    setBoxStyling({
-      ...boxStyling,
-      width: `${boxWidth}px`,
-      height: `${boxHeight}px`,
-      left: `${boxLeft}px`,
-      top: `${boxTop}px`,
-    })
-    // eslint-disable-next-line
-  }, [boxWidth, boxHeight, boxLeft, boxTop])
-
-  // Change the boxes size by the amount of the delta input
-  const changeBoxSize = (deltaWidth, deltaHeight) => {
-    setBoxWidth(boxWidth + deltaWidth)
-    setBoxHeight(boxHeight + deltaHeight)
-  }
-
-  // Changes the boxes position by the amount of the delta input
-  const changeBoxPosition = (deltaLeft, deltaTop) => {
-    setBoxLeft(boxLeft + deltaLeft)
-    setBoxTop(boxTop + deltaTop)
-  }
-
-  // When
+  // When we move the mouse over our box
   const moveMouse = (event) => {
 
-    // Set the mouse information including the change
+    // Set the mouse information including the change in direction (movenmentX/Y isn't accurate enough)
     const xDelta = event.clientX - mouseX;
     const yDelta = event.clientY - mouseY;
     setMouseX(event.clientX)
@@ -61,17 +22,26 @@ function Box() {
 
     // If we're in a "dragging" moment then move the box position 
     if (dragging) {
-      changeBoxPosition(xDelta, yDelta)
+      const top = extractPxNum(box.current.style.top)
+      const left = extractPxNum(box.current.style.left)
+      box.current.style.top = top + yDelta + "px"
+      box.current.style.left = left + xDelta + "px"
     }
+  }
+
+  // Given a css property with a px value, returns the number from the px value
+  const extractPxNum = (value) => {
+    return Number(value.replace("px", ""))
   }
 
   return (
     <div 
-      className="Box" 
-      style={boxStyling} 
+      className="Box"
+      ref={box}
       onMouseMove={moveMouse}
       onMouseDown={() =>  setDragging(true)} 
-      onMouseUp={() => setDragging(false)}>
+      onMouseUp={() => setDragging(false)}
+      onMouseOut={() => setDragging(false)}>
       Imma box
     </div>
   )

@@ -1,0 +1,5 @@
+.Box {
+  background-color: red;
+  position: absolute;
+  cursor: pointer;
+}
