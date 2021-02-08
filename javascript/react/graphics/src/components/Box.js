@@ -18,7 +18,7 @@ function Box(props) {
   const [mouseBoxPosition, setMouseBoxPosition] = useState([0, 0])
   const [dragging, setDragging] = useState(false)
   const [resizing, setResizing] = useState(false)
-  const [edge, setEdge] = useState("")
+  // const [edge, setEdge] = useState("")
   const [boxStyling, setBoxStyling] = useState({
     width: (width ?? "0") + "px",
     height: (height ?? "") + "px",
@@ -121,29 +121,43 @@ function Box(props) {
       left,
       right 
     } = box.current.getBoundingClientRect()
-    console.log(edge, height, bottom, y)
+    console.log(`
+EDGE: ${edge}, 
+HEIGHT: ${height}, 
+BOT: ${bottom}
+Y: ${y}
+CALC1: ${bottom - y}
+CALC2: ${(height + (bottom - y))}`);
+    switch (edge) {
+      case "bottom":
+        box.current.style.height = (height - (bottom - y)) + "px"
+    }
 
   }
 
-  // Just make sure whenever we re-render the application that we move the box to the necessary position
+  // Just make sure whenever we re-render the application...
   useLayoutEffect(() => {
 
-    // Move the box if we're dragging
+    // Move the box to the correct position (if we're dragging)
     if (dragging) {
       moveBoxToMouse(mouseX, mouseY)
-    } else {
-      const edge = getEdgeWithinMargin(mouseX, mouseY)
-      setEdge(edge)
-      if (edge) {
-        setCursorToEdge(edge)
-      } else {
-        setBoxStyling({ ...boxStyling, cursor: "auto"})
-      }
+      return
     }
 
-    if (resizing && edge) {
-      resizeBoxToMouse(edge, mouseX, mouseY)
+    const edge = getEdgeWithinMargin(mouseX, mouseY)
+    if (edge) {
+      setCursorToEdge(edge)
+    } else {
+      setBoxStyling({ ...boxStyling, cursor: "auto"})
     }
+    
+    if (resizing) {
+      resizeBoxToMouse(edge, mouseX, mouseY)
+    } 
+    // setEdge(edge)
+
+    // if (resizing && edge) {
+    // }
   }, [mouseX, mouseY])
 
   return (
@@ -152,7 +166,7 @@ function Box(props) {
       ref={box}
       style={boxStyling}
       // onMouseMove={handleMouseMove}
-      onMouseDown={() => setResizing(!dragging)}
+      onMouseDown={() => setResizing(true)}
       onMouseUp={() => setResizing(false)}
       >
         <div 
