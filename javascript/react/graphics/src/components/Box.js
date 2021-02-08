@@ -1,48 +1,63 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { MouseContext } from '../App.js'
 import "./Box.css"
 
-function Box() {
+function Box(props) {
+
+  const { width, height } = props
 
   // Use Ref to keep a shallow render
   const box = useRef(null);
 
-  const [mouseX, setMouseX] = useState(0)
-  const [mouseY, setMouseY] = useState(0)
+  // Get the global mouse position
+  const [mouseX, mouseY] = useContext(MouseContext)
 
+  // Keeping track of the mouse position and state
+  const [mouseBoxPosition, setMouseBoxPosition] = useState([0, 0])
   const [dragging, setDragging] = useState(false)
 
-  // When we move the mouse over our box
-  const moveMouse = (event) => {
+  const [boxStyling] = useState({
+    width: (width ?? "0") + "px",
+    height: (height ?? "") + "px",
+  })
 
-    // Set the mouse information including the change in direction (movenmentX/Y isn't accurate enough)
-    const xDelta = event.clientX - mouseX;
-    const yDelta = event.clientY - mouseY;
-    setMouseX(event.clientX)
-    setMouseY(event.clientY)
+  // Moves the current box to this position
+  const moveBoxToMouse = (x, y) => {
+    const [mouseBoxX, mouseBoxY] = mouseBoxPosition;
+    const left = x - mouseBoxX
+    const top = y - mouseBoxY
+    box.current.style.left = left + "px"
+    box.current.style.top = top + "px"
+  }
 
-    // If we're in a "dragging" moment then move the box position 
+  // Just make sure whenever we re-render the application that we move the box the the necessary position
+  useEffect(() => {
     if (dragging) {
-      const top = extractPxNum(box.current.style.top)
-      const left = extractPxNum(box.current.style.left)
-      box.current.style.top = top + yDelta + "px"
-      box.current.style.left = left + xDelta + "px"
+      moveBoxToMouse(mouseX, mouseY)
     }
-  }
-
-  // Given a css property with a px value, returns the number from the px value
-  const extractPxNum = (value) => {
-    return Number(value.replace("px", ""))
-  }
+  })
 
   return (
     <div 
       className="Box"
       ref={box}
-      onMouseMove={moveMouse}
-      onMouseDown={() =>  setDragging(true)} 
-      onMouseUp={() => setDragging(false)}
-      onMouseOut={() => setDragging(false)}>
-      Imma box
+      style={boxStyling}>
+        <div 
+        className="headerBar"
+        onMouseDown={(event) => {
+          const rect = box.current.getBoundingClientRect()
+          setMouseBoxPosition([event.clientX - rect.x, event.clientY - rect.y])
+          setDragging(true)
+        }} 
+        onMouseUp={() => setDragging(false)}
+        onMouseOut={() => {
+          console.log("OUT", dragging)
+          if (dragging) {
+            moveBoxToMouse(mouseX, mouseY)
+          } else {
+            setDragging(false)
+          }
+        }}></div>
     </div>
   )
 }
