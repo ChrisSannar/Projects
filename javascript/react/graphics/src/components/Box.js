@@ -18,7 +18,7 @@ function Box(props) {
   const [mouseBoxPosition, setMouseBoxPosition] = useState([0, 0])
   const [dragging, setDragging] = useState(false)
   const [resizing, setResizing] = useState(false)
-  // const [edge, setEdge] = useState("")
+  const [edge, setEdge] = useState("")
   const [boxStyling, setBoxStyling] = useState({
     width: (width ?? "0") + "px",
     height: (height ?? "") + "px",
@@ -30,6 +30,18 @@ function Box(props) {
     const rect = box.current.getBoundingClientRect()
     setMouseBoxPosition([event.clientX - rect.x, event.clientY - rect.y])
     setDragging(true)
+  }
+
+  // When we click on a possible edge to drag...
+  const handleBoxMouseDown = () => {
+    const edgey = getEdgeWithinMargin(mouseX, mouseY) 
+    if (edgey) {
+      setEdge(edgey)
+      setResizing(true)
+    } else {
+      setEdge("")
+      setResizing(false)
+    }
   }
 
   // Make sure when we go out but are still dragging, we move the mouse with it
@@ -105,59 +117,71 @@ function Box(props) {
     }
   }
 
-  // const [mouseBoxX, mouseBoxY] = mouseBoxPosition;
-  //   const left = x - mouseBoxX
-  //   const top = y - mouseBoxY
-  //   box.current.style.left = left + "px"
-  //   box.current.style.top = top + "px"
-
   // resizes the box based on were the mouse is
-  const resizeBoxToMouse = (edge, x, y) => {
+  const resizeBoxToMouse = (x, y) => {
     const { 
       width, 
       height,
-      top,
       bottom,
       left,
       right 
     } = box.current.getBoundingClientRect()
-    console.log(`
-EDGE: ${edge}, 
-HEIGHT: ${height}, 
-BOT: ${bottom}
-Y: ${y}
-CALC1: ${bottom - y}
-CALC2: ${(height + (bottom - y))}`);
+
+    // What edge are we resizing?
     switch (edge) {
       case "bottom":
-        box.current.style.height = (height - (bottom - y)) + "px"
+
+        // Set the new height to itself minus the new difference (plus 1 to keep up the cursor)
+        box.current.style.height = (height - (bottom - y) + 1) + "px";
+        break;
+      case "right":
+
+        // Same idea here
+        box.current.style.width = (width - (right - x) + 1) + "px";
+        break;
+      case "bottomright":
+
+        // Run both values in the case of a corner
+        box.current.style.height = (height - (bottom - y) + 1) + "px";
+        box.current.style.width = (width - (right - x) + 1) + "px";
+        break;
+      case "left":
+
+        // With the left, we have to shift it over as well
+        box.current.style.width = (width + (left - x)) + "px";
+        box.current.style.left = x + "px";
+        break;
+      case "bottomleft":
+        box.current.style.height = (height - (bottom - y) + 1) + "px";
+        box.current.style.width = (width + (left - x)) + "px";
+        box.current.style.left = x + "px";
+        break;
     }
 
   }
 
-  // Just make sure whenever we re-render the application...
+  // We when we re-render the application. Make sure the following are being done (if in that given state)
   useLayoutEffect(() => {
 
     // Move the box to the correct position (if we're dragging)
     if (dragging) {
       moveBoxToMouse(mouseX, mouseY)
-      return
+      return // If we're dragging, we don't need to do anything else more
     }
 
+    // Change the box size if we're resizing
+    if (resizing) {
+      resizeBoxToMouse(mouseX, mouseY)
+    }
+
+    // Set the cursor when we're just hovering over it
     const edge = getEdgeWithinMargin(mouseX, mouseY)
     if (edge) {
       setCursorToEdge(edge)
     } else {
       setBoxStyling({ ...boxStyling, cursor: "auto"})
-    }
-    
-    if (resizing) {
-      resizeBoxToMouse(edge, mouseX, mouseY)
     } 
-    // setEdge(edge)
 
-    // if (resizing && edge) {
-    // }
   }, [mouseX, mouseY])
 
   return (
@@ -166,8 +190,11 @@ CALC2: ${(height + (bottom - y))}`);
       ref={box}
       style={boxStyling}
       // onMouseMove={handleMouseMove}
-      onMouseDown={() => setResizing(true)}
-      onMouseUp={() => setResizing(false)}
+      onMouseDown={handleBoxMouseDown}
+      onMouseUp={() => {
+        setEdge("")
+        setResizing(false)
+      }}
       >
         <div 
         className="headerBar"
