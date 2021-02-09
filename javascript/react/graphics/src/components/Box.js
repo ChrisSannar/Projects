@@ -6,7 +6,7 @@ import "./Box.css"
 const BORDER_MARGIN = 10
 
 function Box(props) {
-  const { width, height } = props
+  const { width, height, zIndex, focus } = props
 
   // Use Ref to keep a shallow render
   const box = useRef(null);
@@ -22,11 +22,12 @@ function Box(props) {
   const [boxStyling, setBoxStyling] = useState({
     width: (width ?? "0") + "px",
     height: (height ?? "") + "px",
-    cursor: "auto"
+    cursor: "auto",
   })
 
   // When we click the mouse down, we need to set the position and set dragging to true
   const handleHeaderMouseDown = (event) => {
+    // focus()
     const rect = box.current.getBoundingClientRect()
     setMouseBoxPosition([event.clientX - rect.x, event.clientY - rect.y])
     setDragging(true)
@@ -34,6 +35,7 @@ function Box(props) {
 
   // When we click on a possible edge to drag...
   const handleBoxMouseDown = () => {
+    focus()
     const edgey = getEdgeWithinMargin(mouseX, mouseY) 
     if (edgey) {
       setEdge(edgey)
@@ -188,7 +190,7 @@ function Box(props) {
     <div 
       className="Box"
       ref={box}
-      style={boxStyling}
+      style={{ ...boxStyling, zIndex}}
       // onMouseMove={handleMouseMove}
       onMouseDown={handleBoxMouseDown}
       onMouseUp={() => {
