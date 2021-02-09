@@ -16,22 +16,21 @@ function App() {
       width: "400",
       height: "300",
       zIndex: 0
+    },
+    {
+      width: "100",
+      height: "100",
+      zIndex: 0
     }
   ])
-
-  useEffect(() => {
-    console.log(boxes)
-  }, [])
 
   // Set all the zIndicies to 0
   const setOnTop = (index) => {
     const newBoxes = [ ...boxes]
-    newBoxes.map(box => {
-      box.zIndex = 0
-      return box
-    })
-    newBoxes[index].zIndex = 10
-    console.log("NEW", newBoxes)
+
+    // Find the largest zIndex and set it +1 to the focused box
+    const total = newBoxes.reduce((acc, current) => acc > current.zIndex ? acc : current.zIndex, 0)
+    newBoxes[index].zIndex = total + 1
     setBoxes(newBoxes)
   }
 
@@ -41,10 +40,7 @@ function App() {
     onMouseMove={(e) => setMousePosition([e.clientX, e.clientY])}>
       <MouseContext.Provider value={mousePosition}>
         {boxes.map((box, index) => 
-          <Box 
-            // zIndex={box.zIndex}
-            // width={box.width} 
-            // height={box.height} 
+          <Box
             {...box}
             focus={() => setOnTop(index)} />)}
       </MouseContext.Provider>
